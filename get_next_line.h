@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:56:48 by blee              #+#    #+#             */
-/*   Updated: 2017/04/18 17:46:49 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/18 18:16:55 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 //# include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
+
+# define BUFF_SIZE 32
 
 int		get_next_line(const int fd, char **line);
 #endif
