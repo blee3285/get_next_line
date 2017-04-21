@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/20 21:52:32 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/20 22:14:28 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	next_str(char *str)
 	if (str[i])
 		ft_strcpy(str, &str[i]);
 	else
-		ft_bzero(str, ft_strlen(str));
+		ft_bzero(str, BUFF_SIZE + 1);
 }
 
 int		check_buff(char *buff, char *line)
@@ -59,6 +59,7 @@ int		get_next_line(const int fd, char **line)
 {
 	static char	*buff;
 	int			reading;
+
 
 	if (!*line)
 		*line = ft_strnew(1);
