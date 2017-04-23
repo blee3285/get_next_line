@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/22 18:50:35 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/22 19:09:43 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ int		find_newline(char *str)
 {
 	while (*str)
 	{
-		if (*str == '\n' || *str == '\0')
+		if (*str == '\n')
 		{
 			*str = '\0';
 			return (1);
 		}
 		str++;
+		if (!*str)
+			return (1);
 	}
 	return (0);
 }
@@ -74,6 +76,8 @@ void	next_str(char *str)
 	i++;
 	if (str[i])
 		ft_strcpy(str, &str[i]);
+	else
+		ft_bzero(str, 1024);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -92,5 +96,6 @@ int		get_next_line(const int fd, char **line)
 		next_str(hold[fd]);
 		return (1);
 	}
+	ft_putstr(hold[fd]);
 	return (0);
 }
