@@ -6,32 +6,20 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/24 16:39:13 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/24 18:34:40 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		bigger_buff(char **str, int size)
-{
-	char	*temp;
-
-	temp = ft_strnew(size);
-	if (!temp)
-		return (1);
-	temp = ft_strcpy(temp, *str);
-	free(*str);
-	*str = temp;
-	return (0);
-}
-
 int		read_file(const int fd, char **str, int size)
 {
 	int		ret;
+	char	*temp;
 	char	*buff;
 
 	buff = ft_strnew(size + 1);
-	*str = ft_strnew(size);
+	*str = ft_strnew(1);
 	if (!buff || !*str)
 		return (1);
 	while ((ret = read(fd, buff, BUFF_SIZE)))
@@ -39,14 +27,9 @@ int		read_file(const int fd, char **str, int size)
 		if (ret == -1)
 			return (1);
 		buff[ret] = '\0';
-		if ((int)(ft_strlen(*str) + ret) > size)
-		{
-			while ((int)(ft_strlen(*str) + ret) > size)
-				size *= 2;
-			if (bigger_buff(str, size))
-				return (1);
-		}
-		ft_strcat(*str, buff);
+		temp = ft_strjoin(*str, buff);
+		free(*str);
+		*str = temp;
 	}
 	free(buff);
 	return (0);
