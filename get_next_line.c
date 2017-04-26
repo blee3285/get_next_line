@@ -6,79 +6,87 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/24 18:34:40 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/26 16:23:51 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		read_file(const int fd, char **str, int size)
+t_list	*find_fd(t_list **hold, size_t fd)
 {
-	int		ret;
-	char	*temp;
-	char	*buff;
+	t_list	*temp;
 
-	buff = ft_strnew(size + 1);
-	*str = ft_strnew(1);
-	if (!buff || !*str)
+	if (!hold)
+		*hold = ft_lstnew(ft_strnew(1), fd);
+	temp = *hold;
+	while (temp)
+	{
+		if (temp->content_size == fd)
+			return (temp);
+		temp = temp->next;
+	}
+	ft_lstadd(hold, ft_lstnew(ft_strnew(1), fd));
+	return (*hold);
+}
+
+int	add_buffer(t_list **hold, char *str)
+{
+	char *temp;
+
+	temp = ft_strjoin((*hold)->content, str);
+	if (!temp)
 		return (1);
-	while ((ret = read(fd, buff, BUFF_SIZE)))
-	{
-		if (ret == -1)
-			return (1);
-		buff[ret] = '\0';
-		temp = ft_strjoin(*str, buff);
-		free(*str);
-		*str = temp;
-	}
-	free(buff);
+	free((*hold)->content);
+	(*hold)->content = temp;
 	return (0);
 }
 
-int		find_newline(char *str)
+char 	*cut_newline(char *str)
 {
-	while (*str)
-	{
-		if (*str == '\n')
-		{
-			*str = '\0';
-			return (1);
-		}
-		str++;
-		if (!*str)
-		{
-			str++;
-			*str = '\0';
-			return (1);
-		}
-	}
-	return (0);
-}
-
-void	next_str(char *str)
-{
-	int i;
+	int	i;
+	char	*temp;
 
 	i = 0;
+	temp = NULL;
 	while (str[i])
+	{
+		if (str[i] == '\n')
+		{
+			temp = ft_strnew(i + 1);
+			ft_strncat(temp, str, i);
+			temp[i] = '\0';
+			ft_strcpy(str, &str[i+ 1]);
+			return (temp);
+		}
 		i++;
-	i++;
-	ft_strcpy(str, &str[i]);
+	}
+	temp = ft_strdup(str);
+	ft_bzero(str, ft_strlen(str));
+	return (temp);
 }
 
-int		get_next_line(const int fd, char **line)
+int	get_next_line(const int fd, char **line)
 {
-	static char	*hold[1024];
+	static t_list	*hold;
+	t_list		*temp;
+	char		*buff;
+	int		ret;
 
-	if (fd < 0 || !line || BUFF_SIZE == 0 || fd >= 1024)
+	if (fd < 0 || !line || BUFF_SIZE < 1)
 		return (-1);
-	if (!hold[fd])
-		if (read_file(fd, &hold[fd], BUFF_SIZE))
-			return (-1);
-	if (find_newline(hold[fd]))
+	temp = find_fd(&hold, fd);
+	buff = ft_strnew(BUFF_SIZE + 1);
+	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
-		*line = ft_strdup(hold[fd]);
-		next_str(hold[fd]);
+		buff[ret] = '\0';
+		if (ret == -1)
+			return (-1);
+		add_buffer(&temp, buff);
+	}
+	free(buff);
+	if (*(char *)(temp->content))
+	{
+		*line = cut_newline(temp->content);
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 15:49:17 by blee              #+#    #+#             */
-/*   Updated: 2017/04/24 15:50:21 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/25 16:23:02 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		main(int ac, char **av)
 		fd1 = open(av[1], O_RDONLY);
 		line = NULL;
 		i = 0;
-		while ((ret = get_next_line(fd1, &line)) && i < 10)
+		while ((ret = get_next_line(fd1, &line)))
 		{
 			ft_putnbr(ret);
 			ft_putstr(": ");
