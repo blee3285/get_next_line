@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/26 16:23:51 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/27 15:12:01 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_list	*find_fd(t_list **hold, size_t fd)
 	return (*hold);
 }
 
-int	add_buffer(t_list **hold, char *str)
+int		add_buffer(t_list **hold, char *str)
 {
 	char *temp;
 
@@ -41,9 +41,9 @@ int	add_buffer(t_list **hold, char *str)
 	return (0);
 }
 
-char 	*cut_newline(char *str)
+char	*cut_newline(char *str)
 {
-	int	i;
+	int		i;
 	char	*temp;
 
 	i = 0;
@@ -53,24 +53,24 @@ char 	*cut_newline(char *str)
 		if (str[i] == '\n')
 		{
 			temp = ft_strnew(i + 1);
-			ft_strncat(temp, str, i);
+			ft_strncpy(temp, str, i);
 			temp[i] = '\0';
-			ft_strcpy(str, &str[i+ 1]);
+			ft_strcpy(str, &str[i + 1]);
 			return (temp);
 		}
 		i++;
 	}
 	temp = ft_strdup(str);
-	ft_bzero(str, ft_strlen(str));
+	ft_strdel(&str);
 	return (temp);
 }
 
-int	get_next_line(const int fd, char **line)
+int		get_next_line(const int fd, char **line)
 {
 	static t_list	*hold;
-	t_list		*temp;
-	char		*buff;
-	int		ret;
+	t_list			*temp;
+	char			*buff;
+	int				ret;
 
 	if (fd < 0 || !line || BUFF_SIZE < 1)
 		return (-1);
