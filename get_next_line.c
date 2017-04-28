@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/27 16:50:06 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/27 18:33:30 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,57 +31,41 @@ t_list	*find_fd(t_list **hold, size_t fd)
 
 int		add_buffer(t_list **hold, char *str)
 {
-	char *temp;
+	char	*temp;
+	int		i;
 
+	i = 0;
 	temp = ft_strjoin((*hold)->content, str);
-	if (!temp)
-		return (1);
 	free((*hold)->content);
 	(*hold)->content = temp;
+	while (temp[i])
+	{
+		if (temp[i] == '\n')
+			return (1);
+		i++;
+	}
 	return (0);
 }
 
-char	*cut_newline(char *str)
+int		cut_newline(char *str, char **line)
 {
 	int		i;
-	char	*temp;
 
 	i = 0;
-	temp = NULL;
 	while (str[i])
 	{
 		if (str[i] == '\n')
 		{
-			temp = ft_strnew(i + 1);
-			ft_strncpy(temp, str, i);
-			temp[i] = '\0';
+			*line = ft_strnew(i + 1);
+			ft_strncat(*line, str, i);
 			ft_strcpy(str, &str[i + 1]);
-			return (temp);
+			return (1);
 		}
 		i++;
 	}
-	temp = ft_strdup(str);
-	ft_bzero(str, ft_strlen(str));
-	return (temp);
-}
-
-void	del_lst(t_list **hold, t_list *lst)
-{
-	t_list	*temp;
-	t_list	*n;
-
-	temp = *hold;
-	n = lst->next;
-	if (temp == lst)
-		*hold = n;
-	else
-	{
-		while (temp->next != lst)
-			temp = temp->next;
-		temp->next = n;
-	}
-	free(lst->content);
-	free(lst);
+	*line = ft_strdup(str);
+	ft_strclr(str);
+	return (1);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -100,14 +84,14 @@ int		get_next_line(const int fd, char **line)
 		buff[ret] = '\0';
 		if (ret == -1)
 			return (-1);
-		add_buffer(&temp, buff);
+		if (add_buffer(&temp, buff))
+		{
+			free(buff);
+			return (cut_newline(temp->content, line));
+		}
 	}
 	free(buff);
 	if (*(char *)(temp->content))
-	{
-		*line = cut_newline(temp->content);
-		return (1);
-	}
-	del_lst(&hold, temp);
+		return (cut_newline(temp->content, line));
 	return (0);
 }
