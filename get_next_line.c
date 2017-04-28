@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/27 15:12:01 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/27 16:50:06 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,27 @@ char	*cut_newline(char *str)
 		i++;
 	}
 	temp = ft_strdup(str);
-	ft_strdel(&str);
+	ft_bzero(str, ft_strlen(str));
 	return (temp);
+}
+
+void	del_lst(t_list **hold, t_list *lst)
+{
+	t_list	*temp;
+	t_list	*n;
+
+	temp = *hold;
+	n = lst->next;
+	if (temp == lst)
+		*hold = n;
+	else
+	{
+		while (temp->next != lst)
+			temp = temp->next;
+		temp->next = n;
+	}
+	free(lst->content);
+	free(lst);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -89,5 +108,6 @@ int		get_next_line(const int fd, char **line)
 		*line = cut_newline(temp->content);
 		return (1);
 	}
+	del_lst(&hold, temp);
 	return (0);
 }
