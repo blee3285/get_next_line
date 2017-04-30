@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/04/27 18:33:30 by blee             ###   ########.fr       */
+/*   Updated: 2017/04/29 17:12:55 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int		add_buffer(t_list **hold, char *str)
 	temp = ft_strjoin((*hold)->content, str);
 	free((*hold)->content);
 	(*hold)->content = temp;
-	while (temp[i])
+	while (str[i])
 	{
-		if (temp[i] == '\n')
+		if (str[i] == '\n')
 			return (1);
 		i++;
 	}
@@ -93,5 +93,6 @@ int		get_next_line(const int fd, char **line)
 	free(buff);
 	if (*(char *)(temp->content))
 		return (cut_newline(temp->content, line));
+	ft_lstdelnode(&hold, &temp);
 	return (0);
 }
