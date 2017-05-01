@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/05/01 12:02:50 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/01 12:24:54 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,7 @@ int		get_next_line(const int fd, char **line)
 		if (ret == -1)
 			return (-1);
 		if (add_buffer(&temp, buff))
-		{
 			return (cut_newline(temp->content, line));
-		}
 	}
 	if (*(char *)(temp->content))
 		return (cut_newline(temp->content, line));
