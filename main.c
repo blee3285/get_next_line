@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 15:49:17 by blee              #+#    #+#             */
-/*   Updated: 2017/04/25 16:23:02 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/01 11:46:38 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		main(int ac, char **av)
 			ft_putstr(line);
 			ft_putchar('\n');
 			i++;
+			free(line);
 		}
 	}
 	return (0);
