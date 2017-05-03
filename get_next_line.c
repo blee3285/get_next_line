@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/05/01 12:24:54 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/03 15:51:09 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ int		add_buffer(t_list **hold, char *str)
 	return (0);
 }
 
-int		cut_newline(char *str, char **line)
+int		cut_newline(t_list **hold, char **line)
 {
 	int		i;
+	char	*str;
 
+	str = (*hold)->content;
 	i = 0;
 	while (str[i])
 	{
@@ -60,7 +62,7 @@ int		cut_newline(char *str, char **line)
 		{
 			*line = ft_strnew(i + 1);
 			ft_strncat(*line, str, i);
-			ft_strcpy(str, &str[i + 1]);
+			ft_strcpy((*hold)->content, &str[i + 1]);
 			return (1);
 		}
 		i++;
@@ -82,14 +84,14 @@ int		get_next_line(const int fd, char **line)
 	temp = find_fd(&hold, fd);
 	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
-		buff[ret] = '\0';
 		if (ret == -1)
 			return (-1);
+		buff[ret] = '\0';
 		if (add_buffer(&temp, buff))
-			return (cut_newline(temp->content, line));
+			return (cut_newline(&temp, line));
 	}
 	if (*(char *)(temp->content))
-		return (cut_newline(temp->content, line));
+		return (cut_newline(&temp, line));
 	ft_lstdelnode(&hold, &temp);
 	return (0);
 }

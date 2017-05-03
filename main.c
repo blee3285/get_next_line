@@ -6,11 +6,12 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 15:49:17 by blee              #+#    #+#             */
-/*   Updated: 2017/05/01 11:46:38 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/03 14:19:23 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int		main(int ac, char **av)
 {
@@ -26,12 +27,14 @@ int		main(int ac, char **av)
 		i = 0;
 		while ((ret = get_next_line(fd1, &line)))
 		{
-			ft_putnbr(ret);
-			ft_putstr(": ");
-			ft_putstr(line);
-			ft_putchar('\n');
+			printf("%d: |%s|\n", ret, line);
 			i++;
 			free(line);
+			if (ret == -1)
+			{
+				ft_putstr("error\n");
+				return (0);
+			}
 		}
 	}
 	return (0);
