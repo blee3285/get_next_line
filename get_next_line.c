@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/05/03 15:51:09 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/04 17:38:35 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		get_next_line(const int fd, char **line)
 	char			buff[BUFF_SIZE + 1];
 	int				ret;
 
-	if (fd < 0 || !line || BUFF_SIZE < 1)
+	if (fd < 0 || fd > 4096 || !line || BUFF_SIZE < 1)
 		return (-1);
 	temp = find_fd(&hold, fd);
 	while ((ret = read(fd, buff, BUFF_SIZE)))
@@ -92,6 +92,5 @@ int		get_next_line(const int fd, char **line)
 	}
 	if (*(char *)(temp->content))
 		return (cut_newline(&temp, line));
-	ft_lstdelnode(&hold, &temp);
 	return (0);
 }

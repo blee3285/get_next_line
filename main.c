@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 15:49:17 by blee              #+#    #+#             */
-/*   Updated: 2017/05/03 14:19:23 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/04 18:36:28 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		main(int ac, char **av)
 	int		i;
 	int		ret;
 
-	if (ac > 1)
+	if (ac > 0)
 	{
 		fd1 = open(av[1], O_RDONLY);
 		line = NULL;
@@ -29,7 +29,6 @@ int		main(int ac, char **av)
 		{
 			printf("%d: |%s|\n", ret, line);
 			i++;
-			free(line);
 			if (ret == -1)
 			{
 				ft_putstr("error\n");
