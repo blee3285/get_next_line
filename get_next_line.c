@@ -6,40 +6,21 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/05/04 17:38:35 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/04 19:32:01 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_list	*find_fd(t_list **hold, size_t fd)
-{
-	t_list	*temp;
-	char	newstr[1];
-
-	newstr[0] = '\0';
-	if (!hold)
-		*hold = ft_lstnew(newstr, fd);
-	temp = *hold;
-	while (temp)
-	{
-		if (temp->content_size == fd)
-			return (temp);
-		temp = temp->next;
-	}
-	ft_lstadd(hold, ft_lstnew(newstr, fd));
-	return (*hold);
-}
-
-int		add_buffer(t_list **hold, char *str)
+int		add_buffer(char **hold, char *str)
 {
 	char	*temp;
 	int		i;
 
 	i = 0;
-	temp = ft_strjoin((*hold)->content, str);
-	free((*hold)->content);
-	(*hold)->content = temp;
+	temp = ft_strjoin(*hold, str);
+	free(*hold);
+	*hold = temp;
 	while (str[i])
 	{
 		if (str[i] == '\n')
@@ -49,48 +30,50 @@ int		add_buffer(t_list **hold, char *str)
 	return (0);
 }
 
-int		cut_newline(t_list **hold, char **line)
+int		cut_newline(char **hold, char **line)
 {
 	int		i;
-	char	*str;
+	char	*temp;
 
-	str = (*hold)->content;
+	temp = *hold;
 	i = 0;
-	while (str[i])
+	while (temp[i])
 	{
-		if (str[i] == '\n')
+		if (temp[i] == '\n')
 		{
-			*line = ft_strnew(i + 1);
-			ft_strncat(*line, str, i);
-			ft_strcpy((*hold)->content, &str[i + 1]);
+			if (!(*line = ft_strnew(i + 1)))
+				return (-1);
+			ft_strncpy(*line, *hold, i);
+			ft_strcpy(*hold, &temp[i + 1]);
 			return (1);
 		}
 		i++;
 	}
-	*line = ft_strdup(str);
-	ft_strclr(str);
+	if (!(*line = ft_strdup(*hold)))
+		return (-1);
+	ft_strclr(*hold);
 	return (1);
 }
 
 int		get_next_line(const int fd, char **line)
 {
-	static t_list	*hold;
-	t_list			*temp;
+	static char		*hold[4096];
 	char			buff[BUFF_SIZE + 1];
 	int				ret;
 
-	if (fd < 0 || fd > 4096 || !line || BUFF_SIZE < 1)
+	if (fd < 0 || fd >= 4096 || !line || BUFF_SIZE < 1)
 		return (-1);
-	temp = find_fd(&hold, fd);
+	if (!hold[fd])
+		hold[fd] = ft_strnew(1);
 	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		if (ret == -1)
 			return (-1);
 		buff[ret] = '\0';
-		if (add_buffer(&temp, buff))
-			return (cut_newline(&temp, line));
+		if (add_buffer(&hold[fd], buff))
+			return (cut_newline(&hold[fd], line));
 	}
-	if (*(char *)(temp->content))
-		return (cut_newline(&temp, line));
+	if (*hold[fd])
+		return (cut_newline(&hold[fd], line));
 	return (0);
 }
