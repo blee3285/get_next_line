@@ -6,7 +6,7 @@
 /*   By: blee <blee@student.42.us.org>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 15:43:37 by blee              #+#    #+#             */
-/*   Updated: 2017/05/04 19:32:01 by blee             ###   ########.fr       */
+/*   Updated: 2017/05/07 18:29:28 by blee             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,11 @@ int		cut_newline(char **hold, char **line)
 
 int		get_next_line(const int fd, char **line)
 {
-	static char		*hold[4096];
+	static char		*hold[4864];
 	char			buff[BUFF_SIZE + 1];
 	int				ret;
 
-	if (fd < 0 || fd >= 4096 || !line || BUFF_SIZE < 1)
+	if (fd < 0 || fd >= 4864 || !line || BUFF_SIZE < 1)
 		return (-1);
 	if (!hold[fd])
 		hold[fd] = ft_strnew(1);
